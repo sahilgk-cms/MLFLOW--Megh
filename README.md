@@ -23,21 +23,6 @@
 docker-compose up ml-pipeline
 ```
 
-## Screenshots
-- **Experiments:** http://{ec2-private-ip}:5000/#/experiments
-<img width="1452" height="393" alt="image" src="https://github.com/user-attachments/assets/1c593a8c-5820-4203-bd19-b145dabcfdf7" />
-
-- **Runs:**
-<img width="1797" height="617" alt="image" src="https://github.com/user-attachments/assets/aa66dc1e-85a5-4e8c-9e06-2c07476ca57b" />
-
-- **Artifacts:** http://{ec2-private-ip}:5000/#/experiments/{experiment_id}/runs/{run_id}/artifacts
- <img width="1422" height="624" alt="image" src="https://github.com/user-attachments/assets/8bc58556-70b1-405f-9861-412a171a116a" />
-
- - **Model Artifacts:** http://{ec2-private-ip}:5000/#/experiments/{experiment_id}/models/{model_id}/artifacts
-<img width="1357" height="785" alt="image" src="https://github.com/user-attachments/assets/d01e15a7-e204-4564-9ad2-da9671ff6b08" />
-
-- **Model Registry:**  http://{ec2-private-ip}:5000/#/models/{registered_model_name}
-<img width="1370" height="825" alt="image" src="https://github.com/user-attachments/assets/776667c4-6d68-4d20-be51-f3511c348ae0" />
 
 
 ## Future improvements
