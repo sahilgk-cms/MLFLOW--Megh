@@ -12,6 +12,7 @@ def initiate_client(mlflow_uri: str):
     return client
 
 
+
 def start_mlflow_experiment(mlflow_uri: str, experiment_name: str, artifact_location: str=None):
     mlflow.set_tracking_uri(mlflow_uri)
 
@@ -22,12 +23,13 @@ def start_mlflow_experiment(mlflow_uri: str, experiment_name: str, artifact_loca
     else:
         experiment_id = mlflow.create_experiment(
             name=experiment_name,
-            artifact_location=artifact_location
+            #artifact_location=artifact_location
         )
 
     mlflow.set_experiment(experiment_name)
 
     return mlflow.get_experiment(experiment_id)
+
 
 
 def register_model_with_data_tags(client,
