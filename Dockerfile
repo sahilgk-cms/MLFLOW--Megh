@@ -5,6 +5,7 @@ WORKDIR /megh-pipeline
 # Install system deps (optional but useful for ML libs)
 RUN apt-get update && apt-get install -y \
     build-essential \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Install uv
