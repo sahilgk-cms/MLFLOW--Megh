@@ -1,6 +1,6 @@
 stages:
   train_pipeline:
-    cmd: docker-compose run megh-pipeline
+    cmd: docker compose run megh-pipeline
 
     deps:
       - main.py
