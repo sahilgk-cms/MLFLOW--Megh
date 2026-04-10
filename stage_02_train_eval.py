@@ -1,5 +1,7 @@
 import mlflow
 import pickle
+from datetime import datetime
+import os
 
 from preprocessing.factory import PreprocessorFactory
 from training.trainer import TimeSeriesTrainer
@@ -7,15 +9,14 @@ from pipelines.train_pipeline import run_training_pipeline
 from pipelines.evaluation_pipeline import run_evaluation_pipeline
 from search_space.search_space import get_search_space
 
-from utils.mlflow_helpers import register_model_with_data_tags, initiate_client
+from utils.mlflow_helpers import register_model_with_data_tags, initiate_client, log_git_to_mlflow, log_dvc_info
 from utils.explainability import log_shap_summary
 from utils.artifact_logger import log_parquet
 from utils.helpers import load_yaml_config
 from utils.hardware import detect_gpu
 
 from config.env import MLFLOW_URI
-from config.filepaths import FEATURE_IMPORTANCE_PATH, PREDICTIONS_PATH, SHAP_SUMMARY_PATH, SHAP_VALUES_PATH
-
+from config.filepaths import DATA_ARTIFACT, FEATURE_IMPORTANCE_PATH, PREDICTIONS_PATH, SHAP_SUMMARY_PATH, SHAP_VALUES_PATH, RUN_ARTIFACT
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -36,11 +37,16 @@ ML_CONFIG["use_gpu"] = detect_gpu()["available"]
 def main():
 
     # load artifacts
-    with open("artifacts/data.pkl", "rb") as f:
+    with open(DATA_ARTIFACT, "rb") as f:
         output = pickle.load(f)
 
-    with open("artifacts/run_id.txt") as f:
-        parent_run_id = f.read().strip()
+    # ⚠️ run_id is optional now (do NOT fail pipeline if missing)
+    parent_run_id = None
+    run_id_path = RUN_ARTIFACT
+
+    if os.path.exists(run_id_path):
+        with open(run_id_path) as f:
+            parent_run_id = f.read().strip()
 
     X_train = output["features"]["X_train"]
     y_train = output["features"]["y_train"]
@@ -65,9 +71,12 @@ def main():
     disease = DATABASE_CONFIG.get('disease').replace(" ", "_")
 
     experiment_name = f"{state}_{disease}"
-    
-    with mlflow.start_run(run_id=parent_run_id):
+    today_date = datetime.now().strftime("%Y/%m/%d")
+    with mlflow.start_run(run_name = f"{experiment_name}_pipeline_root_{today_date}") as root_run:
+        log_git_to_mlflow()
+        log_dvc_info()
 
+        pipeline_root_run_id = root_run.info.run_id
         # training
 
         search_space = get_search_space(
@@ -82,7 +91,7 @@ def main():
             ml_config=ML_CONFIG,
             trainer_cls=TimeSeriesTrainer,
             search_space=search_space,
-            pipeline_root_run_id=parent_run_id,
+            pipeline_root_run_id=pipeline_root_run_id,
             cat_feature_indices=cat_feature_indices
         )
 
@@ -113,7 +122,7 @@ def main():
             ml_config=ML_CONFIG,
             train_data_hash=output["hash"]["train_data_hash"],
             test_data_hash=output["hash"]["test_data_hash"],
-            pipeline_root_run_id=parent_run_id,
+            pipeline_root_run_id=pipeline_root_run_id,
             eval_metric_results=metric_results
         )
 
