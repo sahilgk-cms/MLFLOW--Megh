@@ -97,7 +97,8 @@ def main():
             tags_dict[key] = safe_tag_value(value)
 
         mlflow.set_tags(tags_dict)
-
+        mlflow.set_tags("pipeline_stage", "data")
+        
         log_parquet(df = output["data"]["train_df"], filename=TRAIN_PATH, artifact_path="data")
         log_parquet(df=output["data"]["test_df"], filename=TEST_PATH, artifact_path="data")
 
