@@ -10,6 +10,10 @@ catboost_info/
 # Pycache
 __pycache__/
 
+
+# artifacts
+artifacts/
+
 # Data files
 *.parquet
 *.xlsx
