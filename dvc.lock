@@ -68,8 +68,8 @@ stages:
       size: 640
     - path: stage_02_train_eval.py
       hash: md5
-      md5: bd7f633fb03342106d88dfda60c4b471
-      size: 5676
+      md5: 12e3c7b15bf9b7ae45d3928992950848
+      size: 5947
     outs:
     - path: artifacts/predictions.parquet
       hash: md5
@@ -77,8 +77,8 @@ stages:
       size: 11483
     - path: artifacts/shap_summary.png
       hash: md5
-      md5: 699934b7dd77d0512a1187c2bfbbc46b
-      size: 134920
+      md5: ded2ffc5f80de2d4432f43cd9a0e2b02
+      size: 134867
     - path: artifacts/shap_values.parquet
       hash: md5
       md5: e2e14add24db3c63b23233b50efe287d
