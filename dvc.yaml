@@ -29,3 +29,9 @@ stages:
       - config/db.yaml
       - config/features.yaml
       - config/ml.yaml
+    outs:
+      - artifacts/train_dataset.parquet
+      - artifacts/test_dataset.parquet
+      - artifacts/predictions.parquet
+      - artifacts/shap_values.parquet
+      - artifacts/shap_summary.png
