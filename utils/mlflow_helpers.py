@@ -43,12 +43,8 @@ def log_dvc_info():
     try:
         mlflow.set_tag("dvc_stage", DVC_STAGE)
     
-        result = subprocess.run(
-            ["dvc", "status"],
-            capture_output=True,
-            text=True
-        )
-        mlflow.set_tag("dvc_status", result.stdout.strip())
+
+        mlflow.set_tag("dvc_status", )
 
         if os.path.exists("dvc.lock"):
             with open("dvc.lock", "r") as f:
@@ -82,6 +78,15 @@ def start_mlflow_experiment(mlflow_uri: str, experiment_name: str, artifact_loca
     mlflow.set_experiment(experiment_name)
 
     return mlflow.get_experiment(experiment_id)
+
+
+def safe_end_run():
+    active_run = mlflow.active_run()
+    if active_run:
+        try:
+            mlflow.end_run()
+        except Exception:
+            pass
 
 
 def register_model_with_data_tags(client,
