@@ -27,3 +27,6 @@ artifacts/
 *.pkl
 *.joblib
 *.model
+
+# Db files
+*.db
